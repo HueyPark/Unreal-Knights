@@ -1,0 +1,9 @@
+/Intermediate
+/Saved
+/Binaries
+/.vs
+
+*.sln
+*.suo
+UnrealKnights.VC.VC.opendb
+UnrealKnights.VC.db

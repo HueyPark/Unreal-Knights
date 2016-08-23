@@ -3,6 +3,8 @@
 #include "UnrealKnights.h"
 #include "User.h"
 
+#include "UserUI.h"
+
 AUser::AUser()
 {
 	// Set size for collision capsule
@@ -36,10 +38,24 @@ AUser::AUser()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
+
+	static ConstructorHelpers::FClassFinder<UUserUI> UserUIBPClass(TEXT("/Game/Blueprint/User/BP_UserUI"));
+	if (UserUIBPClass.Class != nullptr)
+	{
+		CLASS_UserUI = UserUIBPClass.Class;
+	}
 }
 
-//////////////////////////////////////////////////////////////////////////
-// Input
+void AUser::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (CLASS_UserUI != nullptr)
+	{
+		UUserUI* UserUI = CreateWidget<UUserUI>(GetWorld(), CLASS_UserUI);
+		UserUI->AddToViewport();
+	}
+}
 
 void AUser::SetupPlayerInputComponent(class UInputComponent* InputComponent)
 {

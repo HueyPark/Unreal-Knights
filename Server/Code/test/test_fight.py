@@ -1,4 +1,4 @@
-from api.fight import read
+from view.fight import read
 
 USER_ID = 1
 

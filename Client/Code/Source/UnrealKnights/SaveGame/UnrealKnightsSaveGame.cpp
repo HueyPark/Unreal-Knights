@@ -1,5 +1,6 @@
 #include "UnrealKnights.h"
 #include "UnrealKnightsSaveGame.h"
+
 #include "Kismet/GameplayStatics.h"
 
 const FString SLOT_NAME = "UnrealKnightSlot";
@@ -11,19 +12,19 @@ UUnrealKnightsSaveGame::UUnrealKnightsSaveGame()
 	UserID = 0;
 }
 
+void UUnrealKnightsSaveGame::Save()
+{
+	UGameplayStatics::SaveGameToSlot(this, SLOT_NAME, USER_INDEX);
+}
+
+
 UUnrealKnightsSaveGame* UUnrealKnightsSaveGame::Load()
 {
 	UUnrealKnightsSaveGame* SaveGame = Cast<UUnrealKnightsSaveGame>(UGameplayStatics::LoadGameFromSlot(SLOT_NAME, USER_INDEX));
 	if (SaveGame == nullptr)
 	{
 		SaveGame = Cast<UUnrealKnightsSaveGame>(UGameplayStatics::CreateSaveGameObject(UUnrealKnightsSaveGame::StaticClass()));
-		Save(SaveGame);
 	}
 
 	return SaveGame;
-}
-
-void UUnrealKnightsSaveGame::Save(UUnrealKnightsSaveGame* SaveGame)
-{
-	UGameplayStatics::SaveGameToSlot(SaveGame, SLOT_NAME, USER_INDEX);
 }

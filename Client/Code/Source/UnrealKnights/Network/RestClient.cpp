@@ -5,6 +5,8 @@
 
 #include "Http.h"
 
+const FString DOMAIN_NAME = "127.0.0.1:5000";
+
 URestClient* URestClient::GetInstance()
 {
 	static URestClient* Instance = NewObject<URestClient>(URestClient::StaticClass());
@@ -47,7 +49,7 @@ void URestClient::Request(const FString& InUrl, const FString& InVerb, const FSt
 		}
 	});
 
-	httpRequest->SetURL(InUrl);
+	httpRequest->SetURL(DOMAIN_NAME + InUrl);
 	httpRequest->SetVerb(InVerb);
 	httpRequest->SetHeader("Content-Type", TEXT("application/json"));
 	httpRequest->SetContentAsString(InData);

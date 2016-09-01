@@ -18,6 +18,6 @@ public:
 public:
 	UUnrealKnightsSaveGame();
 
+	void Save();
 	static UUnrealKnightsSaveGame* Load();
-	static void Save(UUnrealKnightsSaveGame* SaveGame);
 };

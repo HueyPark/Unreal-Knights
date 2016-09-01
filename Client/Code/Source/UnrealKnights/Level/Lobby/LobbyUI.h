@@ -11,4 +11,7 @@ class UNREALKNIGHTS_API ULobbyUI : public UUserWidget
 protected:
 	UFUNCTION(BlueprintCallable, Category = "LobbyUI")
 	void OnStart();
+
+private:
+	void _OpenLevelBattle();
 };

@@ -3,3 +3,7 @@ python:
     - "3.5"
 install: pip install -r Server/Code/requirements.txt
 script: py.test
+services:
+    - mysql
+before_script:
+    - mysql -e 'create database unrealknights;'

@@ -1,4 +1,7 @@
+from database.util import reset as database_reset
 from logic.user import UserLogic
+
+database_reset()
 
 
 def test_create():

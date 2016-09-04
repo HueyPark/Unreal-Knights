@@ -1,18 +1,27 @@
 from database.util import reset as database_reset
 from logic.user import FightLogic
 from logic.user import UserLogic
+from redis import StrictRedis
 
 database_reset()
-
-USER_NUM = 10
+redis = StrictRedis()
+redis.flushall()
 
 
 def test_create():
-    for i in range(USER_NUM):
-        UserLogic.create()
+    user = UserLogic.create()
+    user_id1 = user.id
 
     user = UserLogic.create()
-    fight = FightLogic.create(user.id)
-    new_fight = FightLogic.read(fight.id)
-    assert fight.id == new_fight.id
-    assert new_fight.left_user_id == user.id
+    user_id2 = user.id
+
+    FightLogic.create_request(user_id1)
+    FightLogic.create_request(user_id2)
+
+    fight = FightLogic.create()
+
+    user = UserLogic.read(user_id1)
+    assert user.fight_id == fight.id
+
+    user = UserLogic.read(user_id2)
+    assert user.fight_id == fight.id

@@ -3,11 +3,11 @@ from database.session import Session
 
 
 class FightLogic:
-    @staticmethod
-    def create(user_id) -> Fight:
+    @classmethod
+    def create(cls, user_id) -> Fight:
         session = Session()
 
-        fight = Fight(user_id, 1)
+        fight = Fight(user_id, cls.__get_opponent_user_id())
         session.add(fight)
 
         session.commit()
@@ -21,3 +21,7 @@ class FightLogic:
         fight = session.query(Fight).filter(Fight.id == fight_id).first()
 
         return fight
+
+    @staticmethod
+    def __get_opponent_user_id():
+        return 9

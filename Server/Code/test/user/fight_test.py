@@ -4,10 +4,14 @@ from logic.user import UserLogic
 
 database_reset()
 
+USER_NUM = 10
+
 
 def test_create():
-    user = UserLogic.create()
+    for i in range(USER_NUM):
+        UserLogic.create()
 
+    user = UserLogic.create()
     fight = FightLogic.create(user.id)
     new_fight = FightLogic.read(fight.id)
     assert fight.id == new_fight.id

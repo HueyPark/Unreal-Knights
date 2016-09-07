@@ -11,14 +11,9 @@ void ULobbyUI::OnStart()
 
 	if (SaveGame->bIsUserCreated == false)
 	{
-		URestClient::GetInstance()->Post("/users", "", [this, SaveGame](const FString& Response)
+		URestClient::GetInstance()->Post("/users", "", [this, SaveGame](const json& InData)
 		{
-			const int temp = 5;
-
-			std::string JsonString(TCHAR_TO_UTF8(*Response));
-			json Json = json::parse(JsonString);
-
-			int32 ID = Json[ "id" ];
+			int32 ID = InData[ "id" ];
 
 			SaveGame->bIsUserCreated = true;
 			SaveGame->UserID = ID;

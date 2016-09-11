@@ -1,13 +1,16 @@
+from config import PASSWORD_LENGTH
 from database.model import User
 from database.session import Session
+import random
+import string
 
 
 class UserLogic:
-    @staticmethod
-    def create() -> User:
+    @classmethod
+    def create(cls) -> User:
         session = Session()
 
-        user = User()
+        user = User(cls.__generate_password())
         session.add(user)
 
         session.commit()
@@ -21,3 +24,7 @@ class UserLogic:
         user = session.query(User).filter(User.id == user_id).first()
 
         return user
+
+    @staticmethod
+    def __generate_password() -> str:
+        return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(PASSWORD_LENGTH))

@@ -11,12 +11,14 @@ void ULobbyUI::OnStart()
 
 	if (SaveGame->bIsUserCreated == false)
 	{
-		URestClient::GetInstance()->Post("/users", "", [this, SaveGame](const json& InData)
+		URestClient::GetInstance()->Post("/signup", "", [this, SaveGame](const json& InData)
 		{
 			int32 ID = InData[ "id" ];
+			std::string Password = InData[ "password" ];
 
 			SaveGame->bIsUserCreated = true;
 			SaveGame->UserID = ID;
+			SaveGame->Password = FString(Password.c_str());
 
 			SaveGame->Save();
 

@@ -14,6 +14,7 @@ public:
 
 	UPROPERTY()
 	uint64 UserID;
+	FString Password;
 
 public:
 	UUnrealKnightsSaveGame();

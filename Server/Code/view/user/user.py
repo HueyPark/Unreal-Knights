@@ -7,7 +7,7 @@ class UserView:
     def create():
         new_user = UserLogic.create()
 
-        return jsonify(id=new_user.id)
+        return jsonify(id=new_user.id, password=new_user.password)
 
     @staticmethod
     def read(user_id: int):

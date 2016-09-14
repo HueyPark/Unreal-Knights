@@ -13,5 +13,6 @@ protected:
 	void OnStart();
 
 private:
+	void _Login(const int64& InUserID, const FString& InPassword);
 	void _OpenLevelBattle();
 };

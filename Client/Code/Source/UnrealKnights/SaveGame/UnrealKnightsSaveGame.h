@@ -14,6 +14,8 @@ public:
 
 	UPROPERTY()
 	uint64 UserID;
+
+	UPROPERTY()
 	FString Password;
 
 public:

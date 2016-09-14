@@ -15,17 +15,22 @@ URestClient* URestClient::GetInstance()
 	return Instance;
 }
 
+void URestClient::SetJWT(const FString& InJWT)
+{
+	JWT = InJWT;
+}
+
 void URestClient::Get(const FString& InUrl, std::function<void(const json&)> InCallback /*= nullptr*/)
 {
 	this->Request(InUrl, TEXT("GET"), "", InCallback);
 }
 
-void URestClient::Post(const FString& InUrl, const FString& InData, std::function<void(const json&)> InCallback /*= nullptr*/)
+void URestClient::Post(const FString& InUrl, const json& InData, std::function<void(const json&)> InCallback /*= nullptr*/)
 {
 	this->Request(InUrl, TEXT("POST"), InData, InCallback);
 }
 
-void URestClient::Put(const FString& InUrl, const FString& InData, std::function<void(const json&)> InCallback /*= nullptr*/)
+void URestClient::Put(const FString& InUrl, const json& InData, std::function<void(const json&)> InCallback /*= nullptr*/)
 {
 	this->Request(InUrl, TEXT("PUT"), InData, InCallback);
 }
@@ -35,9 +40,20 @@ void URestClient::Delete(const FString & InUrl, std::function<void(const json&)>
 	this->Request(InUrl, TEXT("DELETE"), "", InCallback);
 }
 
-void URestClient::Request(const FString& InUrl, const FString& InVerb, const FString& InData, std::function<void(const json&)> InCallback)
+void URestClient::Request(const FString& InUrl, const FString& InVerb, const json& InData, std::function<void(const json&)> InCallback)
 {
 	TSharedRef<IHttpRequest> httpRequest = FHttpModule::Get().CreateRequest();
+
+	httpRequest->SetURL(DOMAIN_NAME + InUrl);
+
+	httpRequest->SetHeader("Content-Type", TEXT("application/json"));
+	httpRequest->SetHeader("JWT", JWT);
+
+	httpRequest->SetVerb(InVerb);
+
+	httpRequest->SetContentAsString(FString(InData.dump().c_str()));
+
+	httpRequest->ProcessRequest();
 
 	httpRequest->OnProcessRequestComplete().BindLambda([InCallback](FHttpRequestPtr Request, FHttpResponsePtr Response, bool bWasSuccessful)
 	{
@@ -52,11 +68,4 @@ void URestClient::Request(const FString& InUrl, const FString& InVerb, const FSt
 			}
 		}
 	});
-
-	httpRequest->SetURL(DOMAIN_NAME + InUrl);
-	httpRequest->SetVerb(InVerb);
-	httpRequest->SetHeader("Content-Type", TEXT("application/json"));
-	httpRequest->SetContentAsString(InData);
-
-	httpRequest->ProcessRequest();
 }

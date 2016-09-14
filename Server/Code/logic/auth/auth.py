@@ -14,7 +14,7 @@ class AuthLogic:
 
         token = jwt.encode({USER_ID_KEY: user.id}, JWT_KEY)
 
-        return token
+        return token.decode('UTF-8')
 
     @staticmethod
     def get_user_id(token):

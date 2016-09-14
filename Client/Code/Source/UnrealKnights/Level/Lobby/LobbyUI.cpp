@@ -11,24 +11,46 @@ void ULobbyUI::OnStart()
 
 	if (SaveGame->bIsUserCreated == false)
 	{
-		URestClient::GetInstance()->Post("/signup", "", [this, SaveGame](const json& InData)
-		{
-			int32 ID = InData[ "id" ];
-			std::string Password = InData[ "password" ];
+		URestClient::GetInstance()->Post(
+			"/signup",
+			json(),
+			[this, SaveGame](const json& InData)
+			{
+				int64 ID = InData["id"];
+				std::string Password = InData["password"];
 
-			SaveGame->bIsUserCreated = true;
-			SaveGame->UserID = ID;
-			SaveGame->Password = FString(Password.c_str());
+				SaveGame->bIsUserCreated = true;
+				SaveGame->UserID = ID;
+				SaveGame->Password = FString(Password.c_str());
 
-			SaveGame->Save();
+				SaveGame->Save();
 
-			this->_OpenLevelBattle();
-		});
+				this->_Login(SaveGame->UserID, SaveGame->Password);
+			});
 	}
 	else
 	{
-		_OpenLevelBattle();
+		_Login(SaveGame->UserID, SaveGame->Password);
 	}
+}
+
+void ULobbyUI::_Login(const int64& InUserID, const FString& InPassword)
+{
+	json Json;
+	Json["id"] = InUserID;
+	Json["password"] = TCHAR_TO_UTF8(*InPassword);
+
+	URestClient::GetInstance()->Post(
+		"/login",
+		Json,
+		[this](const json& InData)
+		{
+			std::string jwt = InData["jwt"];
+
+			URestClient::GetInstance()->SetJWT(FString(jwt.c_str()));
+
+			this->_OpenLevelBattle();
+		});
 }
 
 void ULobbyUI::_OpenLevelBattle()

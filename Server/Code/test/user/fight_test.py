@@ -10,18 +10,8 @@ redis.flushall()
 
 def test_create():
     user = UserLogic.create()
-    user_id1 = user.id
+    user_id = user.id
 
-    user = UserLogic.create()
-    user_id2 = user.id
+    fight = FightLogic.create(user_id)
 
-    FightLogic.create_request(user_id1)
-    FightLogic.create_request(user_id2)
-
-    fight = FightLogic.create()
-
-    user = UserLogic.read(user_id1)
-    assert user.fight_id == fight.id
-
-    user = UserLogic.read(user_id2)
-    assert user.fight_id == fight.id
+    assert fight.user_id == user_id

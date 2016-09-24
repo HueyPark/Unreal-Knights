@@ -7,32 +7,15 @@ FIGHT_KEY = 'fight_key'
 
 class FightLogic:
     @classmethod
-    def create(cls) -> Fight:
-        left_user_id = cls.__pop_user_id()
-        right_user_id = cls.__pop_user_id()
-
+    def create(cls, user_id) -> Fight:
         session = Session()
 
-        fight = Fight(left_user_id, right_user_id)
+        fight = Fight(user_id)
         session.add(fight)
 
         session.commit()
 
-        left_user = session.query(User).filter(User.id == left_user_id).first()
-        left_user.fight_id = fight.id
-
-        right_user = session.query(User).filter(User.id == right_user_id).first()
-        right_user.fight_id = fight.id
-
-        session.commit()
-
         return fight
-
-    @staticmethod
-    def create_request(user_id):
-        redis = StrictRedis()
-
-        redis.rpush(FIGHT_KEY, user_id)
 
     @staticmethod
     def read(user_id: int) -> Fight:

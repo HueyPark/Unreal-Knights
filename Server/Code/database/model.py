@@ -20,9 +20,7 @@ class Fight(Base):
     __tablename__ = 'fight'
 
     id = Column(BigInteger, primary_key=True, autoincrement=True)
-    left_user_id = Column(BigInteger)
-    right_user_id = Column(BigInteger)
+    user_id = Column(BigInteger)
 
-    def __init__(self, left_user_id: int, right_user_id: int):
-        self.left_user_id = left_user_id
-        self.right_user_id = right_user_id
+    def __init__(self, user_id: int):
+        self.user_id = user_id

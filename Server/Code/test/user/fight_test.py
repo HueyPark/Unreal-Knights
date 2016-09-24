@@ -1,5 +1,5 @@
 from database.util import reset as database_reset
-from logic.user import FightLogic
+from logic.fight import FightLogic
 from logic.user import UserLogic
 from redis import StrictRedis
 

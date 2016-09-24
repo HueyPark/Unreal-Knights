@@ -1,13 +1,10 @@
-from database.model import Fight, User
+from database.model import Fight, FightCharacter
 from database.session import Session
-from redis import StrictRedis
-
-FIGHT_KEY = 'fight_key'
 
 
 class FightLogic:
     @classmethod
-    def create(cls, user_id) -> Fight:
+    def create(cls, user_id, fight_static_data_id) -> Fight:
         session = Session()
 
         fight = Fight(user_id)
@@ -15,22 +12,10 @@ class FightLogic:
 
         session.commit()
 
-        return fight
+        fight_character = FightCharacter(fight.id, 1)
+        session.add(fight_character)
 
-    @staticmethod
-    def read(user_id: int) -> Fight:
-        session = Session()
-
-        fight_id, = session.query(User.id).filter(User.id == user_id).first()
-        if fight_id is None:
-            raise Exception
-
-        fight = session.query(Fight).filter(Fight.id == fight_id).first()
+        session.commit()
 
         return fight
 
-    @staticmethod
-    def __pop_user_id() -> int:
-        redis = StrictRedis()
-
-        return int(redis.blpop(FIGHT_KEY)[1])

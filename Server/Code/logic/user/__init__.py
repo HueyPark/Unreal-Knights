@@ -1,2 +1,2 @@
 from .fight_logic import FightLogic
-from .user import UserLogic
+from .user_logic import UserLogic

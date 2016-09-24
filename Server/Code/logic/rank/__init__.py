@@ -1,1 +1,1 @@
-from .rank import RankLogic
+from .rank_logic import RankLogic

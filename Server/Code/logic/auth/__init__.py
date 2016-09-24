@@ -1,1 +1,1 @@
-from .auth import AuthLogic
+from .auth_logic import AuthLogic
